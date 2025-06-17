@@ -18,7 +18,7 @@ const Step1CampaignInfo = () => {
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    updateCampaignData({ campaignDescription: e.target.value });
+    updateCampaignData({ campaignDescription: e.target.value.trimStart() });
   };
 
   const showNameError =
