@@ -6,7 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { AlertCircle } from "lucide-react";
 
 const Step1CampaignInfo = () => {
-  const { campaignData, updateCampaignData } = useCampaign();
+  const { campaignData, updateCampaignData, getValidationErrors } =
+    useCampaign();
   const [isNameTouched, setIsNameTouched] = React.useState(false);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,6 +23,8 @@ const Step1CampaignInfo = () => {
 
   const showNameError =
     isNameTouched && campaignData.campaignName.trim() === "";
+
+  const errors = getValidationErrors(1);
 
   return (
     <div className="space-y-6">
@@ -65,6 +68,12 @@ const Step1CampaignInfo = () => {
           Add a brief description to help you remember what this campaign is
           about.
         </p>
+        {errors.campaignDescription && (
+          <div className="flex items-center space-x-2 text-red-600 text-sm mt-1">
+            <AlertCircle className="w-4 h-4" />
+            <span>{errors.campaignDescription}</span>
+          </div>
+        )}
       </div>
     </div>
   );

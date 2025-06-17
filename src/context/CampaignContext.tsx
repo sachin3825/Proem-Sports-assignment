@@ -2,10 +2,13 @@ import React, {
   createContext,
   useContext,
   useState,
+  useEffect,
   type ReactNode,
 } from "react";
-
 import { validateStep, type CampaignFormData } from "@/lib/validation";
+
+// Define storage key
+const STORAGE_KEY = "campaign_data";
 
 interface CampaignContextType {
   campaignData: CampaignFormData;
@@ -14,18 +17,19 @@ interface CampaignContextType {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   isStepValid: (step: number) => boolean;
   getValidationErrors: (step: number) => Record<string, string>;
+  clearCampaignData: () => void; // 👈 New method
 }
 
 const CampaignContext = createContext<CampaignContextType | undefined>(
   undefined
 );
 
-const initialCampaignData: CampaignFormData = {
+const defaultCampaignData: CampaignFormData = {
   campaignName: "",
   campaignDescription: "",
   audienceType: "all",
-  customFilter: {
-    platform: [],
+  customFilters: {
+    platforms: [],
     country: "",
     signupDateRange: {
       from: null,
@@ -43,12 +47,36 @@ export const CampaignContextProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const [campaignData, setCampaignData] =
-    useState<CampaignFormData>(initialCampaignData);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [campaignData, setCampaignData] = useState<CampaignFormData>(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : defaultCampaignData;
+    } catch {
+      return defaultCampaignData;
+    }
+  });
+
+  const [currentStep, setCurrentStep] = useState(() => {
+    const step = localStorage.getItem("campaign_step");
+    return step ? parseInt(step) : 1;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(campaignData));
+  }, [campaignData]);
+
+  useEffect(() => {
+    localStorage.setItem("campaign_step", String(currentStep));
+  }, [currentStep]);
 
   const updateCampaignData = (data: Partial<CampaignFormData>) => {
     setCampaignData((prev) => ({ ...prev, ...data }));
+  };
+
+  const clearCampaignData = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    setCampaignData(defaultCampaignData);
+    setCurrentStep(1);
   };
 
   const isStepValid = (step: number): boolean => {
@@ -70,6 +98,7 @@ export const CampaignContextProvider = ({
         setCurrentStep,
         isStepValid,
         getValidationErrors,
+        clearCampaignData,
       }}
     >
       {children}

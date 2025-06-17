@@ -15,9 +15,9 @@ export const campaignSchema = z.object({
 
   // step 2
   audienceType: z.enum(["all", "new", "inactive", "custom"]),
-  customFilter: z
+  customFilters: z
     .object({
-      platform: z.array(z.string()).optional(),
+      platforms: z.array(z.string()).optional(),
       country: z.string().optional(),
       signupDateRange: z
         .object({
@@ -59,24 +59,31 @@ export const validateStep = (step: number, data: any) => {
           .parse(data);
         return { isValid: true, errors: {} };
       case 2:
-        if (data.audienceType === "custom") {
-          campaignSchema
-            .pick({
-              audienceType: true,
-              customFilter: true,
-            })
-            .parse(data);
+        campaignSchema.pick({ audienceType: true }).parse(data);
 
-          if (
-            !data.customFilter?.platform?.length &&
-            !data.customFilter?.country
-          ) {
+        if (data.audienceType === "custom") {
+          campaignSchema.pick({ customFilters: true }).parse(data);
+
+          const hasPlatform =
+            Array.isArray(data.customFilters?.platforms) &&
+            data.customFilters.platforms.length > 0;
+          const hasCountry = !!data.customFilters?.country;
+          const hasDateRange =
+            !!data.customFilters?.signupDateRange?.from &&
+            !!data.customFilters?.signupDateRange?.to;
+
+          if (!hasPlatform && !hasCountry && !hasDateRange) {
             return {
               isValid: false,
-              errors: { customFilter: "At least one filter is required" },
+              errors: {
+                customFilters:
+                  "At least one custom filter (Platform, Country, or Date Range) is required",
+              },
             };
           }
         }
+
+        return { isValid: true, errors: {} };
 
         campaignSchema.pick({ audienceType: true }).parse(data);
         return { isValid: true, errors: {} };
