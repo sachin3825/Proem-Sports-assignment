@@ -419,6 +419,12 @@ const Step2AudienceSegment = () => {
                             undefined
                           }
                           onSelect={(date) => handleDateRangeChange("to", date)}
+                          disabled={(date) => {
+                            const fromDate =
+                              campaignData.customFilters?.signupDateRange?.from;
+                            // Disable dates that are before the "from" date
+                            return fromDate ? date <= fromDate : false;
+                          }}
                           className="pointer-events-auto"
                         />
                       </PopoverContent>

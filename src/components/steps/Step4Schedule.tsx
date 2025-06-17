@@ -81,16 +81,22 @@ const Step4Schedule = () => {
             <Card
               key={option.value}
               className="cursor-pointer hover:shadow-md transition-shadow"
+              onClick={() => handleScheduleTypeChange(option.value)}
             >
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
-                  <RadioGroupItem value={option.value} id={option.value} />
+                  <RadioGroupItem
+                    value={option.value}
+                    id={option.value}
+                    onClick={(e) => e.stopPropagation()}
+                  />
                   <div className="flex-1">
                     <div className="flex items-center space-x-2">
                       {option.icon}
                       <Label
                         htmlFor={option.value}
                         className="font-medium cursor-pointer"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         {option.label}
                       </Label>

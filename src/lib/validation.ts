@@ -25,7 +25,7 @@ export const campaignSchema = z.object({
           to: z.date().nullable(),
         })
         .refine(
-          (range) => !range?.from || !range?.to || range.from < range.to,
+          (range) => !range?.from || !range?.to || range.from <= range.to,
           {
             message: '"From" date must be earlier than "To" date',
             path: ["from"],
