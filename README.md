@@ -51,6 +51,9 @@ A multi-step campaign creation interface with channel-specific messaging support
 
 * **Radix UI + Keyframes animations**
   Accordion and tab transitions use Radix-friendly `@keyframes` to enhance the user experience without heavy animation libraries.
+  
+*  **Zod Validation**
+   Used to validate user inputs (e.g., message content, step completion) in a type-safe and declarative way. Helps ensure correctness before progressing between steps.
 
 ### State Management
 
