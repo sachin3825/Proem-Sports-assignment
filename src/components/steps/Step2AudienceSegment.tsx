@@ -344,7 +344,7 @@ const Step2AudienceSegment = () => {
                 <Label className="text-sm font-medium mb-3 block">
                   Signup Date Range
                 </Label>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs text-muted-foreground mb-1 block">
                       From
