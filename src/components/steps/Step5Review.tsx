@@ -102,16 +102,7 @@ const Step5Review = () => {
       campaignData.message.length > 100
         ? campaignData.message.substring(0, 100) + "..."
         : campaignData.message;
-
-    return previewMessage.replace(/\{\{(\w+)\}\}/g, (match, token) => {
-      const replacements: Record<string, string> = {
-        first_name: "John",
-        last_name: "Doe",
-        email: "john.doe@example.com",
-        company: "Acme Corp",
-      };
-      return replacements[token] || match;
-    });
+    return previewMessage;
   };
 
   return (
