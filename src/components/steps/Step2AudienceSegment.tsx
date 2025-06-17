@@ -125,10 +125,11 @@ const Step2AudienceSegment = () => {
   };
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const trimmedCountry = e.target.value.trimStart();
     updateCampaignData({
       customFilters: {
         platforms: campaignData.customFilters?.platforms || [],
-        country: e.target.value,
+        country: trimmedCountry,
         signupDateRange: campaignData.customFilters?.signupDateRange || {
           from: null,
           to: null,
